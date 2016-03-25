@@ -1,0 +1,249 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: 'DejaVuSansMono';
+  src: url('./fonts/DejaVuSansMono.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'DejaVuSansMono-Bold';
+  src: url('./fonts/DejaVuSansMono-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'icon';
+  src: url('./fonts/foundation-icons.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'VertigoPlusFLF';
+  src: url('./fonts/VertigoPlusFLF.ttf') format('truetype');
+}
+
+* {
+	transform-origin: 0px 0px 0px;
+}
+
+html|* > svg {
+	transform-origin: 50% 50% 0px;
+}
+
+svg:not(:root), symbol, image, marker, pattern, foreignObject {
+	overflow: hidden;
+}
+
+html, body {
+	height:100%;
+	margin: 0;
+	padding: 0;
+	background-color: #3E362F;
+	color: #AF5B1D;
+}
+
+body {
+	overflow-x: hidden;
+	margin: 0;
+	padding: 0;
+	font-family: 'DejaVuSansMono';
+	letter-spacing: 2px;
+}
+
+#loadOverlay{
+	
+}
+
+#login{
+	transition: all 0.75s;
+	transform: translate3d(0, 0, 0);
+	position: absolute;
+	top: 6vh;
+	width: 75%;
+	margin: 0 auto;
+	left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+	display: table;
+}
+
+#rightGate, #leftGate {
+	transition: all 0.75s;
+	transform: translate3d(0, 0, 0);
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+#rightGate svg, #leftGate svg{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+.titleFont {
+	font-family: 'VertigoPlusFLF';
+}
+
+input, textarea {
+	width: 75%;
+	color: #AF5B1D;
+	background: #2E2823;
+	border-top: solid 2px #AF5B1D;
+	border-left: solid 2px #AF5B1D;
+	border-bottom: solid 2px #020202;
+	border-right: solid 2px #020202;
+	outline: none;
+	resize: none;
+	box-sizing: border-box;
+	padding: 14px;
+	padding-bottom: 7px;
+	font-family: 'DejaVuSansMono-Bold';
+}
+
+.goBtn{
+	display: table-cell;
+	vertical-align: middle;
+	font-family: icon;
+	font-size: 48px;
+	padding-left: 14px;
+	width: 10px;
+	position: relative;
+	z-index: 3;
+	cursor: pointer;
+}
+
+.goBtnShadow{
+	position: absolute;
+	top: 0;
+	color: #2E2823;
+	padding-left: 0px;
+	transform: translate3d(-4px, 3px, 0);
+	z-index: -5;
+}
+
+#mainSubmit {
+	position: absolute;
+	bottom: 3px;
+	right: 0px;
+	width: 10%;
+	padding: 0px;
+	padding-left: 0px;
+	text-align: left;
+}
+
+#mainSettings{
+	position: absolute;
+	bottom: 3px;
+	left: 0px;
+	width: 10%;
+	padding: 0px;
+	padding-left: 0px;
+	text-align: right;
+}
+
+#chatInput{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+    right: 0;
+	width: 75%;
+	height: 52px;
+	margin: 0 auto;
+	margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+	padding: 1em;
+	padding-bottom: 0em;
+	background-color: #554D47;
+	border: none;
+	border-top: 2px solid #AF5B1D;
+	color: #cbc1b8;
+}
+
+#chatOutput{
+	position: absolute;
+	bottom: 56px;
+	left: 0;
+    right: 0;
+	width: 96vw;
+	max-width: 96vw;
+	height: calc(100vh - 56px);
+	margin: 0 auto;
+	margin-left: auto;
+    margin-right: auto;
+    overflow-y: hidden;
+	color: #cbc1b8;
+	display: table;
+	border-collapse: separate;
+    border-spacing: 0 1em;
+}
+
+.chatLine{
+	display: table-row;
+	text-shadow: 2px 0 1px #000;
+}
+
+.odd{ background-color: #554D47; }
+
+.chatLine .leftSide{
+	display: table-cell;
+	text-align: right;
+	padding-right: 7px;
+	max-width: 210px;
+    word-wrap: break-word;
+}
+
+.chatLine .leftSide span{
+	color: #020202;
+	font-size: 11px;
+	padding-right: 7px;
+	text-shadow: none;
+}
+
+.chatLine .leftSide b{
+	color: #AF5B1D;
+}
+
+
+.chatLine .rightSide{
+	display: table-cell;
+	max-width: calc(92vw - 210px);
+	word-wrap: break-word;
+}
+
+.reconnectTimer{
+	
+}
+
+.mention{
+	
+}
+
+@media screen and (min-aspect-ratio: 13/9){ /* landscape */
+	
+}
+
+@media screen and (min-aspect-ratio: 14/9){ /* landscape */
+	
+}
+
+@media screen and (max-aspect-ratio: 13/9){ /* portrait */
+	/*#chatOutput{ display: block; }*/
+	.chatLine{ display: block; }
+	.chatLine .leftSide{ display: block; text-align: left; }
+	.chatLine .leftSide:after{ color: #AF5B1D; content: ":"; }
+	.chatLine .rightSide{ display: block; max-width: 92vw; word-wrap: break-word;  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
