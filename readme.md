@@ -4,7 +4,28 @@ Android App for ToastyStoemp chat
 
 
 # Build
+Prerequisites:
+	Install Node.js ( https://nodejs.org/ )
+	Install Cordova CLI ( npm install -g cordova )
+	Install JDK 7 or greater ( http://www.oracle.com/technetwork/java/javase/downloads/index.html )
+	Install Android Studio ( https://developer.android.com/sdk/index.html )
+
+
+
+Clone Git & Run:
 cordova build android
+
+
+
+
+# Assist
+Easiest way to assist in building the UI is to clone the git, install xammp, change htdocs path to:
+<git dir>/www/
+
+
+
+Then load http://127.0.0.1/ in _Chrome_. Edit, refresh, repeat.
+
 
 
 
@@ -13,8 +34,7 @@ cordova build android
 	
 	
 	
-	Add splash screen or fade in, div already in place; id "loadOverlay"
-	Add chr(13) (enter button) detection to login input
+	Add splash screen for fade in, div already in place; id "loadOverlay"
 	Add channel carousel under login
 	
 	

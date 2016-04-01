@@ -54,57 +54,173 @@ function showChatUI(){
 	var chatInput = document.createElement('textarea');
 	chatInput.setAttribute('id', 'chatInput');
 	
-	chatInput.onkeydown = function(e){
-		if(e.keyCode == 13 && !e.shiftKey){
-			e.preventDefault();
-			chatRoomArray[typingIn].say(this.value);
-			this.value = '';
-			return false;
+	chatInput.addEventListener("keydown", function(e){
+			if(e.keyCode == 13 && !e.shiftKey){
+				e.preventDefault();
+				chatRoomArray[typingIn].say(this.value);
+				this.value = '';
+				return false;
+			}
 		}
-	};
-	
+	, false);
 	document.body.appendChild(chatInput);
-	
-	/* add main submit dom */
-	//<div class="goBtn" onclick="startLogin()"><div class="goBtn goBtnShadow"></div></div>
-	var outterSubmitBtn = document.createElement('div');
-	outterSubmitBtn.setAttribute('id', 'mainSubmit');
-	outterSubmitBtn.setAttribute("class", "goBtn");
-	outterSubmitBtn.innerHTML = '';
-	
-	var innerSubmitBtn = document.createElement('div');
-	innerSubmitBtn.setAttribute("class", "goBtn goBtnShadow");
-	innerSubmitBtn.innerHTML = '';
-	
-	outterSubmitBtn.onmousedown = function(e){
-		chatRoomArray[typingIn].say(chatInput.value);
-		chatInput.value = '';
-	};
-	
-	outterSubmitBtn.appendChild(innerSubmitBtn);
-	document.body.appendChild(outterSubmitBtn);
-	
-	/* add settings dom */
-	var outterSettingsBtn = document.createElement('div');
-	outterSettingsBtn.setAttribute('id', 'mainSettings');
-	outterSettingsBtn.setAttribute("class", "goBtn");
-	outterSettingsBtn.innerHTML = '';
-	
-	var innerSettingsBtn = document.createElement('div');
-	innerSettingsBtn.style.cssText = 'width: 100%;';
-	innerSettingsBtn.setAttribute("class", "goBtn goBtnShadow");
-	innerSettingsBtn.innerHTML = '';
-	
-	outterSettingsBtn.onmousedown = function(e){
-		dropSettings();
-	};
-	
-	outterSettingsBtn.appendChild(innerSettingsBtn);
-	document.body.appendChild(outterSettingsBtn);
 	
 	// clone chat engine, init & go go go
 	chatRoomArray.push(buildNewChat());
 	chatRoomArray[0].init();
+}
+
+function popMenu(e){
+	
+}
+
+function onBack(e){
+	
+}
+
+calculateRejoinTimeout = function(count){
+	switch (count){
+		case 0:
+		case 1: return  2000;
+		case 2: return  3000;
+		case 3: return  6000;
+		case 4: return 12000;
+		case 5: return 22000;
+	}
+	return 30000;
+}
+
+onSocketData = function(data, socket){
+	switch(data.cmd){
+		case 'verify':
+			//if(data.valid == false) pushMessage(socket.myOutputDiv, {nick: 'warn', errCode: 'E000', text: "You have an outdated client, update your app!"}); // Left for future updates //
+			socket.send({cmd: 'join', channel: socket.myChannel, nick: myNick, pass: myPass});
+		break;
+		case 'chat':
+			if(socket.ignoredUsers.indexOf(data.nick) >= 0){
+				return;
+			}
+			
+			data.isLastPoster = (socket.lastPoster == data.nick);
+			socket.lastPoster = data.nick;
+			
+			data.nickColour = socket.onlineUsers[data.nick];
+			
+			pushMessage(socket.myOutputDiv, data);
+		break;
+		case 'info':
+			data.nick = '*';
+			
+			pushMessage(socket.myOutputDiv, data);
+		break;
+		case 'shout':
+			data.nick = "<Server>";
+			
+			pushMessage(socket.myOutputDiv, data);
+			if(disconnectCodes.indexOf(data.errCode) != -1) socket.ws.close();
+		break;
+		case 'warn':
+			data.nick = '!';
+			
+			pushMessage(socket.myOutputDiv, data);
+			if(disconnectCodes.indexOf(data.errCode) != -1) socket.ws.close();
+		break;
+		case 'onlineSet':
+			// this is not sane server response. . . //
+			socket.usersClear();
+			
+			for (var i = 0, j = data.nicks.length; i < j; i++){
+				socket.userAdd(data.nicks[i], data.trips[i]);
+			}
+			
+			pushMessage(socket.myOutputDiv, {nick: '*', text: "Users online: " + data.nicks.join(", ")});
+		break;
+		case 'onlineAdd':
+			var nick = data.nick;
+			var trip = data.trip;
+			
+			socket.userAdd(nick, trip);
+			
+			//if($('#joined-left').is(":checked")){ // left here for future reference //
+			pushMessage(socket.myOutputDiv, {nick: '*', text: nick + " joined"});
+		break;
+		case 'onlineRemove':
+			var nick = data.nick;
+			
+			socket.userRemove(nick);
+			
+			//if($('#joined-left').is(":checked")){ // left here for future reference //
+			pushMessage(socket.myOutputDiv, {nick: '*', text: nick + " left"});
+		break;
+		case 'play':
+			pushMessage(socket.myOutputDiv, {nick: "*", text: nick + " cannot show his video because @Rut is lazy. . ."});
+		break;
+	}
+}
+
+function pushMessage(targetDiv, data){
+	var chatLine = document.createElement('div');
+	chatLine.setAttribute('class', 'chatLine');
+	
+	if(targetDiv.childNodes.length % 2) addClass(chatLine, 'odd');
+	
+	if(data.admin){
+		addClass(chatLine, 'admin');
+	}else if(data.nick == myNick){
+		addClass(chatLine, 'me');
+	}else if(data.nick == '!'){
+		addClass(chatLine, 'warn');
+	}else if(data.nick == '*'){
+		addClass(chatLine, 'info');
+	}else if(data.nick == '<Server>'){
+		addClass(chatLine, 'shout');
+	}
+	
+	var leftSide = document.createElement('div');
+	leftSide.setAttribute('class', 'leftSide');
+	
+	var tripDom = document.createElement('span');
+	if(typeof data.trip !== 'undefined' && !data.isLastPoster){
+		if(data.admin){
+			tripDom.innerHTML = 'Admin';
+		}else{
+			tripDom.innerHTML = data.trip;
+		}
+	}
+	leftSide.appendChild(tripDom);
+	
+	var nickDom = document.createElement('b');
+	if(data.donator) addClass(nickDom, 'donator');
+	if(typeof data.nickColour !=='undefined') nickDom.style.cssText = 'color:' + data.nickColour;
+	if(!data.isLastPoster) nickDom.innerHTML = data.nick;
+	leftSide.appendChild(nickDom);
+	
+	chatLine.appendChild(leftSide);
+	
+	var rightSide = document.createElement('div');
+	rightSide.setAttribute('class', 'rightSide');
+	
+	if(data.text.indexOf("@" + myNick) != -1){
+		addClass(rightSide, 'mention');
+		//if($('#notifications').is(":checked") && !document.hasFocus()){ // left here for future reference //
+		// add vibrate phone here //
+		notifySound.play();
+	}else if(data.text.indexOf("@*") != -1){
+		addClass(rightSide, 'mention');
+	}
+	
+	rightSide.innerHTML = data.text;
+	
+	chatLine.appendChild(rightSide);
+	
+	// add ontouchend bind here //
+	
+	targetDiv.appendChild(chatLine);
+}
+
+function addClass(target, newClass){
+	// setAttribute ~31% faster than classList.add() //
+	target.setAttribute('class', target.getAttribute('class') + ' ' + newClass);
 }
 
 function localStorageGet(key) {

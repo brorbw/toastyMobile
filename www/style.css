@@ -194,7 +194,7 @@ input, textarea {
 }
 
 .chatLine .leftSide span{
-	color: #020202;
+	color: #DDD;
 	font-size: 11px;
 	padding-right: 7px;
 	text-shadow: none;
@@ -204,14 +204,33 @@ input, textarea {
 	color: #AF5B1D;
 }
 
-
 .chatLine .rightSide{
 	display: table-cell;
 	max-width: calc(92vw - 210px);
 	word-wrap: break-word;
 }
 
-.reconnectTimer{
+.admin{
+	
+}
+
+.donator{
+	border-bottom: 2px #AF5B1D solid;
+}
+
+.me{
+	
+}
+
+.warn{
+	
+}
+
+.info{
+	
+}
+
+.shout{
 	
 }
 
@@ -232,7 +251,7 @@ input, textarea {
 	.chatLine{ display: block; }
 	.chatLine .leftSide{ display: block; text-align: left; }
 	.chatLine .leftSide:after{ color: #AF5B1D; content: ":"; }
-	.chatLine .rightSide{ display: block; max-width: 92vw; word-wrap: break-word;  }
+	.chatLine .rightSide{ display: block; max-width: 92vw; word-wrap: break-word; padding-top: 4px; padding-bottom: 14px; }
 }
 
 
