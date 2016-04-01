@@ -211,7 +211,7 @@ input, textarea {
 }
 
 .admin{
-	
+	color: #dc322f;
 }
 
 .donator{
@@ -235,7 +235,7 @@ input, textarea {
 }
 
 .mention{
-	
+	color: #b58900;
 }
 
 @media screen and (min-aspect-ratio: 13/9){ /* landscape */
