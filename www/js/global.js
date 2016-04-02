@@ -46,7 +46,9 @@ function showChatUI(){
 	/* add main output dom */
 	chatOutput = document.createElement('div');
 	chatOutput.setAttribute('id', 'chatOutput');
-	chatOutput.innerHTML = '<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />'; /* Quick hack to init chat view */
+	chatOutput.innerHTML = '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>'; /* Quick hack to init chat view */
+	
+	touchControl.addTouchScrolling(chatOutput);
 	
 	document.body.appendChild(chatOutput);
 	
@@ -63,6 +65,7 @@ function showChatUI(){
 			}
 		}
 	, false);
+	
 	document.body.appendChild(chatInput);
 	
 	// clone chat engine, init & go go go

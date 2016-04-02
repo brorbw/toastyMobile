@@ -1,6 +1,7 @@
 var framework = {
 	scrArray: [
 				'js/chatEngine.js',
+				'js/touchControl.js',
 				'js/global.js',
 				'js/init.js'
 				],

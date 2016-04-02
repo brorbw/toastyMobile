@@ -41,7 +41,7 @@ html, body {
 }
 
 body {
-	overflow-x: hidden;
+	overflow: hidden;
 	margin: 0;
 	padding: 0;
 	font-family: 'DejaVuSansMono';
@@ -210,8 +210,8 @@ input, textarea {
 	word-wrap: break-word;
 }
 
-.admin{
-	color: #dc322f;
+.admin b{
+	color: #dc322f !important;
 }
 
 .donator{
@@ -250,7 +250,7 @@ input, textarea {
 	/*#chatOutput{ display: block; }*/
 	.chatLine{ display: block; }
 	.chatLine .leftSide{ display: block; text-align: left; }
-	.chatLine .leftSide:after{ color: #AF5B1D; content: ":"; }
+	.chatLine .leftSide:after{ color: #AF5B1D; } /* content: ":"; */
 	.chatLine .rightSide{ display: block; max-width: 92vw; word-wrap: break-word; padding-top: 4px; padding-bottom: 14px; }
 }
 

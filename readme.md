@@ -5,10 +5,13 @@ Android App for ToastyStoemp chat
 
 # Build
 Prerequisites:
-	Install Node.js ( https://nodejs.org/ )
-	Install Cordova CLI ( npm install -g cordova )
-	Install JDK 7 or greater ( http://www.oracle.com/technetwork/java/javase/downloads/index.html )
-	Install Android Studio ( https://developer.android.com/sdk/index.html )
+	- Install Node.js ( https://nodejs.org/ )
+	
+	- Install Cordova CLI ( npm install -g cordova )
+	
+	- Install JDK 7 or greater ( http://www.oracle.com/technetwork/java/javase/downloads/index.html )
+	
+	- Install Android Studio ( https://developer.android.com/sdk/index.html )
 
 
 
@@ -20,7 +23,7 @@ cordova build android
 
 # Assist
 Easiest way to assist in building the UI is to clone the git, install xammp, change htdocs path to:
-<git dir>/www/
+(git dir)/www/
 
 
 

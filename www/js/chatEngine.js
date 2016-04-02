@@ -1,17 +1,17 @@
 var chatEngine = {
 	ws: 0,
 	pingInterval: 0,
-	myChannel: 'programming',
-	
+	myChannel: '',
 	connectTime: 0,
 	joinTryCount: 0,
 	lastPoster: '',
-	myOutputDiv: 'chatOutput',
+	myOutputDiv: '',
 	onlineUsers: {},
 	ignoredUsers: [],
 	
 	init: function(channel, div){
-		channel = typeof channel !== 'undefined' ? channel : 'programming';
+		//channel = typeof channel !== 'undefined' ? channel : 'programming';
+		channel = typeof channel !== 'undefined' ? channel : 'mobiledev';
 		div = typeof div !== 'undefined' ? div : 'chatOutput';
 		
 		this.myChannel = channel;
@@ -32,7 +32,7 @@ var chatEngine = {
 			my.send({cmd: 'verify', version: webClientVersion});
 			my.pingInterval = window.setInterval(function(){
 				my.send({cmd: 'ping'});
-			}, 50*1000);
+			}, 49*1000);
 		}
 		
 		this.ws.onclose = function(){
