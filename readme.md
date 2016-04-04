@@ -34,22 +34,14 @@ Then load http://127.0.0.1/ in _Chrome_. Edit, refresh, repeat.
 
 
 # To Do:
-	Update Cordova config.xml to allow app to run in bg
+	Update Cordova config.xml to allow app to run as background process
 	
-	
-	
-	Add splash screen for fade in, div already in place; id "loadOverlay"
+	Add splash screen, fade out & fade in, div already in place; id "loadOverlay"
 	Add channel carousel under login
-	
-	
 	
 	Add vibration plugin and bind to @nick, to vibrate if process in background
 	
-	
-	
-	Add settings dropdown and bind to phone button
 	Implement all settings
 	
-	
-	
-	Add onclick chat line; popup menu (ignore, reply, etc)
+	Finish onclick chat line; popup menu (ignore, reply, etc)
+	Add main menu (current channel list, settings, etc)

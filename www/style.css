@@ -238,6 +238,31 @@ input, textarea {
 	color: #b58900;
 }
 
+/* line menu css */
+.menu{
+	margin: 0 auto;
+	position: absolute;
+	top: 100vh;
+    transition: all 0.25s;
+    transform: translate3d(0px, 0px, 0px);
+	left: 0;
+	width: 100vw;
+	background: #2E2823;
+	border-top: 2px solid #AF5B1D;
+	text-align: center;
+}
+
+.menuLink{
+	margin: 0 auto;
+    width: 90%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: solid 2px #554D47;
+    background-color: #3E362F;
+    padding: 16px;
+}
+
+
 @media screen and (min-aspect-ratio: 13/9){ /* landscape */
 	
 }

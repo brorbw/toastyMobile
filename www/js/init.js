@@ -1,6 +1,6 @@
 document.id = 'mainDocument';
 
-document.addEventListener("menubutton", popMenu, false);
+document.addEventListener("menubutton", popMainMenu, false);
 document.addEventListener("backbutton", onBack, false);
 
 document.getElementById('username').addEventListener("keydown", function(e){
@@ -19,9 +19,17 @@ touchControl.bindEvent(window, 'touchend', function(event){
 		return;
 	}
 	
-	var touchedNode = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY).parentNode;
-	
-	if(touchedNode.getAttribute('class') != null && touchedNode.getAttribute('class').split(' ')[0] == 'chatLine'){
-		//console.log(touchedNode.childNodes);
+	var currentNode = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
+	var notFound = true;
+	while(notFound){
+		if(typeof currentNode === 'undefined' || currentNode == null) break;
+		
+		if(typeof currentNode.getAttribute !== 'undefined' && currentNode.getAttribute('class') != null && currentNode.getAttribute('class').split(' ')[0] == 'chatLine'){
+			notFound = false;
+			popLineMenu(currentNode);
+			break;
+		}
+		
+		currentNode = currentNode.parentNode;
 	}
 });

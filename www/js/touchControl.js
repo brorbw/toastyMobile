@@ -94,6 +94,8 @@ var touchControl = {
 			
 			if(this.eventBinds[target.id].length == 0) delete this.eventBinds[target.id];
 		}
+		
+		return true;
 	},
 	
 	innerUnbind: function(targetNode){
@@ -103,9 +105,11 @@ var touchControl = {
 			
 			if(this.eventBinds[nodes[i].id] != undefined){
 				for(var j = 0; j < this.eventBinds[nodes[i].id].length; j++){
-					this.eventBinds[nodes[i].id][j].node.removeEventListener(this.eventBinds[nodes[i].id][j].type, this.eventBinds[nodes[i].id][j].func);
-					this.eventBinds[nodes[i].id].splice(j, 1);
+					if(nodes[i].id != undefined){
+						this.eventBinds[nodes[i].id][j].node.removeEventListener(this.eventBinds[nodes[i].id][j].type, this.eventBinds[nodes[i].id][j].func);
+						this.eventBinds[nodes[i].id].splice(j, 1);
 					j--;
+					}
 				}
 				
 				if(this.eventBinds[nodes[i].id].length == 0) delete this.eventBinds[nodes[i].id];

@@ -1,11 +1,27 @@
-/* global vars */
+/* setup global vars */
 var chatRoomArray = [];
-var typingIn = 0;
+//var channelNames = ['programming'];
+var currentChannel = 0;
 var myNick = "";
 var myPass = "";
+var myLogin = "";
 var notifySound = new Audio('audio/notifi-sound.wav');
 var webClientVersion = "toastyMobileV0.1.0";
 var disconnectCodes = ['E002', 'E003', 'I004', 'E005'];
+
+var chatInput = document.createElement('textarea');
+chatInput.setAttribute('id', 'chatInput');
+
+chatInput.addEventListener("keydown", function(e){
+		if(e.keyCode == 13 && !e.shiftKey){
+			e.preventDefault();
+			chatRoomArray[currentChannel].say(this.value);
+			this.value = '';
+			document.activeElement.blur();
+			return false;
+		}
+	}
+, false);
 
 /* global functions */
 
@@ -16,13 +32,14 @@ function buildNewChat(){
 }
 
 function startLogin(){
-	/* store login info */
-	var userStr = document.getElementById('username').value;
-	if(userStr.indexOf('#') != -1) {
-		myNick = test.split('#')[0];
-		myPass = test.split('#')[1];
+	/* init login data */
+	myLogin = document.getElementById('username').value;
+	
+	if(myLogin.indexOf('#') != -1){
+		myPass = myLogin.split('#')[1];
+		myNick = myLogin.split('#')[0];
 	}else{
-		myNick = userStr;
+		myNick = myLogin;
 	}
 	
 	/* queue animations */
@@ -53,19 +70,6 @@ function showChatUI(){
 	document.body.appendChild(chatOutput);
 	
 	/* add main input dom */
-	var chatInput = document.createElement('textarea');
-	chatInput.setAttribute('id', 'chatInput');
-	
-	chatInput.addEventListener("keydown", function(e){
-			if(e.keyCode == 13 && !e.shiftKey){
-				e.preventDefault();
-				chatRoomArray[typingIn].say(this.value);
-				this.value = '';
-				return false;
-			}
-		}
-	, false);
-	
 	document.body.appendChild(chatInput);
 	
 	// clone chat engine, init & go go go
@@ -73,8 +77,116 @@ function showChatUI(){
 	chatRoomArray[0].init();
 }
 
-function popMenu(e){
+function makeID(){
+	var returnID = "";
+	var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+	for(var i = 0; i < 7; i++) returnID += chars.charAt(Math.floor(Math.random() * chars.length));
+
+	return returnID;
+}
+
+function popMainMenu(e){
+	// current channel list, adjust settings
+}
+
+function popLineMenu(line){
+	var menu = document.createElement('div');
+	menu.setAttribute('id', 'lineMenu');
+	menu.setAttribute('class', 'menu');
 	
+	// add channel links to menu //
+	if(line.getAttribute('channels') != null){
+		JSON.parse(line.getAttribute('channels')).forEach(function(channel){
+			var link = document.createElement('div');
+			link.setAttribute('id', makeID());
+			link.setAttribute('targetChannel', channel.substr(1));
+			link.setAttribute('class', 'menuLink');
+			link.innerHTML = 'Join Channel: ' + channel;
+			touchControl.bindEvent(link, 'touchend', function(event){
+				joinNewChannel(this.getAttribute('targetChannel'));
+				
+				var wait = touchControl.unbindEvent(menu);
+				menu.parentNode.removeChild(menu);
+			});
+			
+			menu.appendChild(link);
+		});
+	}
+	
+	// add imgs links to menu //
+	if(line.getAttribute('imgs') != null){
+		JSON.parse(line.getAttribute('imgs')).forEach(function(img){
+			var link = document.createElement('div');
+			link.setAttribute('id', makeID());
+			link.setAttribute('targetImg', img);
+			link.setAttribute('class', 'menuLink');
+			link.innerHTML = 'View Image: ' + img.substr(img.lastIndexOf('/'));
+			touchControl.bindEvent(link, 'touchend', function(event){
+				viewImage(this.getAttribute('targetImg'));
+				
+				var wait = touchControl.unbindEvent(menu);
+				menu.parentNode.removeChild(menu);
+			});
+			
+			menu.appendChild(link);
+		});
+	}
+	
+	// add urls links to menu //
+	if(line.getAttribute('urls') != null){
+		JSON.parse(line.getAttribute('urls')).forEach(function(url){
+			var link = document.createElement('div');
+			link.setAttribute('id', makeID());
+			link.setAttribute('targetUrl', url);
+			link.setAttribute('class', 'menuLink');
+			link.innerHTML = 'Open: ' + url.substr(0, 20);
+			touchControl.bindEvent(link, 'touchend', function(event){
+				openURL(this.getAttribute('targetUrl'));
+				
+				var wait = touchControl.unbindEvent(menu);
+				menu.parentNode.removeChild(menu);
+			});
+			
+			menu.appendChild(link);
+		});
+	}
+	
+	
+	if(menu.childNodes.length == 0){ // simply @user //
+		chatInput.value = chatInput.value + '@' + line.getAttribute('nick');
+	}else{
+		var targetUser = '@' + line.getAttribute('nick');
+		var link = document.createElement('div');
+		link.setAttribute('id', makeID());
+		link.setAttribute('targetUser', targetUser);
+		link.setAttribute('class', 'menuLink');
+		link.innerHTML = 'Reply: ' + targetUser;
+		touchControl.bindEvent(link, 'touchend', function(event){
+			chatInput.value = chatInput.value + this.getAttribute('targetUser');
+			
+			var wait = touchControl.unbindEvent(menu);
+			menu.parentNode.removeChild(menu);
+		});
+		
+		// add ignore opion here //
+		
+		menu.appendChild(link);
+		document.body.appendChild(menu);
+		setTimeout( function(){ menu.style.transform = 'translate3d(0px, -100%, 0px)'; }, 100);
+	}
+}
+
+function joinNewChannel(channel){
+	console.log('joining ' + channel);
+}
+
+function viewImage(img){
+	console.log('viewing ' + img);
+}
+
+function openURL(url){
+	console.log('opening ' + url);
 }
 
 function onBack(e){
@@ -109,7 +221,7 @@ onSocketData = function(data, socket){
 			
 			data.nickColour = socket.onlineUsers[data.nick];
 			
-			pushMessage(socket.myOutputDiv, data);
+			pushMessage(socket.myOutputDiv, data, parseLinks(data.text));
 		break;
 		case 'info':
 			data.nick = '*';
@@ -161,9 +273,35 @@ onSocketData = function(data, socket){
 	}
 }
 
-function pushMessage(targetDiv, data){
+function parseLinks(data){
+	var returnData = {imgs: [], urls: [], channels: []};
+	
+	data.split(' ').forEach(function(block){
+		if((/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig).test(block)){
+			if((/\.(gif|jpg|jpeg|tiff|png)$/i).test(block)){
+				returnData.imgs.push(block);
+			}else{
+				returnData.urls.push(block);
+			}
+		}else if(block.length > 1 && block.substr(0, 1) == '?'){
+			returnData.channels.push(block);
+		}
+	});
+	
+	return returnData;
+}
+
+function pushMessage(targetDiv, data, linkages){
+	if(typeof targetDiv === 'undefined') return; // fix this bandaid later :D //
+	linkages = typeof linkages !== 'undefined' ? linkages : false;
+	
 	var chatLine = document.createElement('div');
 	chatLine.setAttribute('class', 'chatLine');
+	chatLine.setAttribute('nick', data.nick);
+	
+	if(linkages != false && linkages.channels.length > 0) chatLine.setAttribute('channels', JSON.stringify(linkages.channels));
+	if(linkages != false && linkages.imgs.length > 0) chatLine.setAttribute('imgs', JSON.stringify(linkages.imgs));
+	if(linkages != false && linkages.urls.length > 0) chatLine.setAttribute('urls', JSON.stringify(linkages.urls));
 	
 	if(targetDiv.childNodes.length % 2) addClass(chatLine, 'odd');
 	
