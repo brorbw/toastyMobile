@@ -7,7 +7,6 @@ var chatEngine = {
 	lastPoster: '',
 	myOutputDiv: '',
 	onlineUsers: {},
-	ignoredUsers: [],
 	
 	init: function(channel, div){
 		//channel = typeof channel !== 'undefined' ? channel : 'programming';
@@ -17,7 +16,6 @@ var chatEngine = {
 		this.myChannel = channel;
 		this.myOutputDiv = div;
 		
-		this.myOutputDiv = document.getElementById(this.myOutputDiv);
 		this.join(this.myChannel);
 	},
 	
@@ -102,9 +100,5 @@ var chatEngine = {
 			notifySound.play();
 			
 		}
-	},
-	
-	userIgnore: function(nick){
-		this.ignoredUsers.push(nick);
 	}
 }

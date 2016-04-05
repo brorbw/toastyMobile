@@ -43,5 +43,20 @@ Then load http://127.0.0.1/ in _Chrome_. Edit, refresh, repeat.
 	
 	Implement all settings
 	
-	Finish onclick chat line; popup menu (ignore, reply, etc)
-	Add main menu (current channel list, settings, etc)
+	Finish main menu (settings, etc)
+	Set back button to clear menus
+	Fix touch detection loop (use touchControl.ignoreNext)
+
+
+
+
+# Finished:
+	Login / join main channel- with animation
+	Display chat events with formatting
+	Touch scrolling through chat
+	Touch chat line menu: Reply, ignore, invite, join channel, view image (*PH), open url (*PH)- with animation
+	Main menu (opens with phone menu button): change current channel- with animation
+	Multi channel support
+	
+	
+	*PH = Placeholder, function fires but no action taken

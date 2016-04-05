@@ -1,29 +1,17 @@
 /* setup global vars */
-var chatRoomArray = [];
-//var channelNames = ['programming'];
+var chatRoomSockets = [];
+var channelData = [{name: 'mobiledev', slot: 0, chanDiv: ''}];
 var currentChannel = 0;
 var myNick = "";
 var myPass = "";
 var myLogin = "";
+var ignoredUsers = [];
 var notifySound = new Audio('audio/notifi-sound.wav');
 var webClientVersion = "toastyMobileV0.1.0";
 var disconnectCodes = ['E002', 'E003', 'I004', 'E005'];
 
-var chatInput = document.createElement('textarea');
-chatInput.setAttribute('id', 'chatInput');
 
-chatInput.addEventListener("keydown", function(e){
-		if(e.keyCode == 13 && !e.shiftKey){
-			e.preventDefault();
-			chatRoomArray[currentChannel].say(this.value);
-			this.value = '';
-			document.activeElement.blur();
-			return false;
-		}
-	}
-, false);
-
-/* global functions */
+// global functions //
 
 function buildNewChat(){
 	function chat(){};
@@ -32,7 +20,7 @@ function buildNewChat(){
 }
 
 function startLogin(){
-	/* init login data */
+	// init login data //
 	myLogin = document.getElementById('username').value;
 	
 	if(myLogin.indexOf('#') != -1){
@@ -42,143 +30,53 @@ function startLogin(){
 		myNick = myLogin;
 	}
 	
-	/* queue animations */
-	document.getElementById('login').style.transform = 'translate3d(0, -300%, 0)';
-	
-	setTimeout(function(){
-		document.getElementById('rightGate').style.transform = 'translate3d(75%, 0, 0)';
-		document.getElementById('leftGate').style.transform = 'translate3d(-75%, 0, 0)';
-	}, 300);
-	
-	setTimeout(function(){
-		document.body.removeChild(document.getElementById('login'));
-		document.body.removeChild(document.getElementById('rightGate'));
-		document.body.removeChild(document.getElementById('leftGate'));
-		
-		showChatUI();
-	}, 700);
+	// run animations //
+	gui.openGates();
 }
 
-function showChatUI(){
-	/* add main output dom */
-	chatOutput = document.createElement('div');
-	chatOutput.setAttribute('id', 'chatOutput');
-	chatOutput.innerHTML = '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>'; /* Quick hack to init chat view */
+function firstLogin(){
+	// build output dom //
+	channelData[currentChannel].chanDiv = gui.genDom('div', '', 'chatOutput', '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>'); // <br> is to init div //
 	
-	touchControl.addTouchScrolling(chatOutput);
+	touchControl.addTouchScrolling(channelData[currentChannel].chanDiv);
 	
-	document.body.appendChild(chatOutput);
+	document.body.appendChild(channelData[currentChannel].chanDiv);
 	
-	/* add main input dom */
-	document.body.appendChild(chatInput);
+	// add main input dom //
+	document.body.appendChild(gui.chatInput);
 	
-	// clone chat engine, init & go go go
-	chatRoomArray.push(buildNewChat());
-	chatRoomArray[0].init();
-}
-
-function makeID(){
-	var returnID = "";
-	var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-	for(var i = 0; i < 7; i++) returnID += chars.charAt(Math.floor(Math.random() * chars.length));
-
-	return returnID;
-}
-
-function popMainMenu(e){
-	// current channel list, adjust settings
-}
-
-function popLineMenu(line){
-	var menu = document.createElement('div');
-	menu.setAttribute('id', 'lineMenu');
-	menu.setAttribute('class', 'menu');
-	
-	// add channel links to menu //
-	if(line.getAttribute('channels') != null){
-		JSON.parse(line.getAttribute('channels')).forEach(function(channel){
-			var link = document.createElement('div');
-			link.setAttribute('id', makeID());
-			link.setAttribute('targetChannel', channel.substr(1));
-			link.setAttribute('class', 'menuLink');
-			link.innerHTML = 'Join Channel: ' + channel;
-			touchControl.bindEvent(link, 'touchend', function(event){
-				joinNewChannel(this.getAttribute('targetChannel'));
-				
-				var wait = touchControl.unbindEvent(menu);
-				menu.parentNode.removeChild(menu);
-			});
-			
-			menu.appendChild(link);
-		});
-	}
-	
-	// add imgs links to menu //
-	if(line.getAttribute('imgs') != null){
-		JSON.parse(line.getAttribute('imgs')).forEach(function(img){
-			var link = document.createElement('div');
-			link.setAttribute('id', makeID());
-			link.setAttribute('targetImg', img);
-			link.setAttribute('class', 'menuLink');
-			link.innerHTML = 'View Image: ' + img.substr(img.lastIndexOf('/'));
-			touchControl.bindEvent(link, 'touchend', function(event){
-				viewImage(this.getAttribute('targetImg'));
-				
-				var wait = touchControl.unbindEvent(menu);
-				menu.parentNode.removeChild(menu);
-			});
-			
-			menu.appendChild(link);
-		});
-	}
-	
-	// add urls links to menu //
-	if(line.getAttribute('urls') != null){
-		JSON.parse(line.getAttribute('urls')).forEach(function(url){
-			var link = document.createElement('div');
-			link.setAttribute('id', makeID());
-			link.setAttribute('targetUrl', url);
-			link.setAttribute('class', 'menuLink');
-			link.innerHTML = 'Open: ' + url.substr(0, 20);
-			touchControl.bindEvent(link, 'touchend', function(event){
-				openURL(this.getAttribute('targetUrl'));
-				
-				var wait = touchControl.unbindEvent(menu);
-				menu.parentNode.removeChild(menu);
-			});
-			
-			menu.appendChild(link);
-		});
-	}
-	
-	
-	if(menu.childNodes.length == 0){ // simply @user //
-		chatInput.value = chatInput.value + '@' + line.getAttribute('nick');
-	}else{
-		var targetUser = '@' + line.getAttribute('nick');
-		var link = document.createElement('div');
-		link.setAttribute('id', makeID());
-		link.setAttribute('targetUser', targetUser);
-		link.setAttribute('class', 'menuLink');
-		link.innerHTML = 'Reply: ' + targetUser;
-		touchControl.bindEvent(link, 'touchend', function(event){
-			chatInput.value = chatInput.value + this.getAttribute('targetUser');
-			
-			var wait = touchControl.unbindEvent(menu);
-			menu.parentNode.removeChild(menu);
-		});
-		
-		// add ignore opion here //
-		
-		menu.appendChild(link);
-		document.body.appendChild(menu);
-		setTimeout( function(){ menu.style.transform = 'translate3d(0px, -100%, 0px)'; }, 100);
-	}
+	// build chat engine, init & go go go
+	chatRoomSockets.push(buildNewChat());
+	chatRoomSockets[0].init(channelData[currentChannel].name, channelData[currentChannel].chanDiv);
 }
 
 function joinNewChannel(channel){
 	console.log('joining ' + channel);
+	var nextSlot = channelData.push({name: channel, slot: 0, chanDiv: ''}) - 1;
+	// build output dom //
+	channelData[nextSlot].slot = nextSlot;
+	channelData[nextSlot].chanDiv = gui.genDom('div', '', 'chatOutput', '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>'); // <br> is to init div //
+	
+	touchControl.addTouchScrolling(channelData[nextSlot].chanDiv);
+	
+	channelData[currentChannel].chanDiv.style.display = 'none';
+	document.body.appendChild(channelData[nextSlot].chanDiv);
+	
+	currentChannel = nextSlot;
+	
+	// build chat engine, init & go go go
+	chatRoomSockets.push(buildNewChat());
+	chatRoomSockets[currentChannel].init(channelData[currentChannel].name, channelData[currentChannel].chanDiv);
+}
+
+function changeChannel(newChan){
+	if(newChan == 99999){
+		console.log('making new channel');
+	}else{
+		channelData[currentChannel].chanDiv.style.display = 'none';
+		currentChannel = newChan;
+		channelData[currentChannel].chanDiv.style.display = 'table';
+	}
 }
 
 function viewImage(img){
@@ -193,7 +91,12 @@ function onBack(e){
 	
 }
 
-calculateRejoinTimeout = function(count){
+function ignoreUser(nick){
+	//ignoredUsers.push(nick);
+	gui.popMainMenu();
+}
+
+function calculateRejoinTimeout(count){
 	switch (count){
 		case 0:
 		case 1: return  2000;
@@ -205,14 +108,14 @@ calculateRejoinTimeout = function(count){
 	return 30000;
 }
 
-onSocketData = function(data, socket){
+function onSocketData(data, socket){
 	switch(data.cmd){
 		case 'verify':
 			//if(data.valid == false) pushMessage(socket.myOutputDiv, {nick: 'warn', errCode: 'E000', text: "You have an outdated client, update your app!"}); // Left for future updates //
 			socket.send({cmd: 'join', channel: socket.myChannel, nick: myNick, pass: myPass});
 		break;
 		case 'chat':
-			if(socket.ignoredUsers.indexOf(data.nick) >= 0){
+			if(ignoredUsers.indexOf(data.nick) >= 0){
 				return;
 			}
 			
@@ -226,7 +129,7 @@ onSocketData = function(data, socket){
 		case 'info':
 			data.nick = '*';
 			
-			pushMessage(socket.myOutputDiv, data);
+			pushMessage(socket.myOutputDiv, data, parseLinks(data.text));
 		break;
 		case 'shout':
 			data.nick = "<Server>";

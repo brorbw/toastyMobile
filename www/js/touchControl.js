@@ -1,5 +1,6 @@
 var touchControl = {
 	isScrolling: false,
+	ignoreNext: false,
 	eventBinds: [],
 	
 	init: function(channel, div){

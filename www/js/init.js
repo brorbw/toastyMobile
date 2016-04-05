@@ -1,6 +1,8 @@
 document.id = 'mainDocument';
 
-document.addEventListener("menubutton", popMainMenu, false);
+gui.init();
+
+document.addEventListener("menubutton", gui.popMainMenu, false);
 document.addEventListener("backbutton", onBack, false);
 
 document.getElementById('username').addEventListener("keydown", function(e){
@@ -12,7 +14,7 @@ document.getElementById('username').addEventListener("keydown", function(e){
 	}
 , false);
 
-/* chat line click handler */
+// chat line click handler //
 touchControl.bindEvent(window, 'touchend', function(event){
 	if(touchControl.isScrolling){
 		touchControl.isScrolling = false;
@@ -26,10 +28,11 @@ touchControl.bindEvent(window, 'touchend', function(event){
 		
 		if(typeof currentNode.getAttribute !== 'undefined' && currentNode.getAttribute('class') != null && currentNode.getAttribute('class').split(' ')[0] == 'chatLine'){
 			notFound = false;
-			popLineMenu(currentNode);
+			gui.popLineMenu(currentNode);
 			break;
 		}
 		
 		currentNode = currentNode.parentNode;
 	}
 });
+

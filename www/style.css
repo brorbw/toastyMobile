@@ -160,7 +160,7 @@ input, textarea {
 	color: #cbc1b8;
 }
 
-#chatOutput{
+.chatOutput{
 	position: absolute;
 	bottom: 56px;
 	left: 0;
@@ -262,6 +262,16 @@ input, textarea {
     padding: 16px;
 }
 
+select {
+	margin: 0 auto;
+    width: 90%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: solid 2px #554D47;
+    background-color: #3E362F;
+    padding: 16px;
+	color: #FFF;
+}
 
 @media screen and (min-aspect-ratio: 13/9){ /* landscape */
 	
