@@ -9,7 +9,7 @@ var ignoredUsers = [];
 var notifySound = new Audio('audio/notifi-sound.wav');
 var webClientVersion = "toastyMobileV0.1.0";
 var disconnectCodes = ['E002', 'E003', 'I004', 'E005'];
-
+var currentMenu = '';
 
 // global functions //
 
@@ -87,8 +87,14 @@ function openURL(url){
 	console.log('opening ' + url);
 }
 
-function onBack(e){
+function closeCurrentMenu(){
+	var menu = document.getElementById(currentMenu);
+	if(menu == null) return;
 	
+	var wait = touchControl.unbindEvent(menu);
+	menu.parentNode.removeChild(menu);
+	currentMenu = '';
+	setTimeout( function(){ touchControl.handleGlobal = false; }, 500);
 }
 
 function ignoreUser(nick){
@@ -257,8 +263,6 @@ function pushMessage(targetDiv, data, linkages){
 	
 	chatLine.appendChild(rightSide);
 	
-	// add ontouchend bind here //
-	
 	targetDiv.appendChild(chatLine);
 }
 
@@ -267,18 +271,18 @@ function addClass(target, newClass){
 	target.setAttribute('class', target.getAttribute('class') + ' ' + newClass);
 }
 
-function localStorageGet(key) {
-	try {
+function localStorageGet(key){
+	try{
 		return window.localStorage[key];
 	}
-	catch(e) {}
+	catch(e){}
 }
 
-function localStorageSet(key, val) {
-	try {
+function localStorageSet(key, val){
+	try{
 		window.localStorage[key] = val;
 	}
-	catch(e) {}
+	catch(e){}
 }
 
 function getDragSize(e){

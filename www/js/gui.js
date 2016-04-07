@@ -1,5 +1,6 @@
 var gui = {
 	chatInput: '',
+	availableCss: [],
 	
 	init: function(channel, div){
 		this.chatInput = document.createElement('textarea');
@@ -65,7 +66,10 @@ var gui = {
 	},
 	
 	popLineMenu: function(line){
+		closeCurrentMenu();
 		var menu = this.genDom('div', 'lineMenu', 'menu');
+		currentMenu = 'lineMenu';
+		touchControl.handleGlobal = true;
 		
 		// add channel links to menu //
 		if(line.getAttribute('channels') != null){
@@ -73,8 +77,7 @@ var gui = {
 				var link = gui.genDom('div', '', 'menuLink', 'Join Channel: ' + channel, [{name: 'targetChannel', value: channel.substr(1)}], [{eventName: 'touchend', func: function(event){
 					joinNewChannel(this.getAttribute('targetChannel'));
 					
-					var wait = touchControl.unbindEvent(menu);
-					menu.parentNode.removeChild(menu);
+					closeCurrentMenu();
 				}}]);
 				
 				menu.appendChild(link);
@@ -87,8 +90,7 @@ var gui = {
 				var link = gui.genDom('div', '', 'menuLink', 'View Image: ' + img.substr(img.lastIndexOf('/')), [{name: 'targetImg', value: img}], [{eventName: 'touchend', func: function(event){
 					viewImage(this.getAttribute('targetImg'));
 					
-					var wait = touchControl.unbindEvent(menu);
-					menu.parentNode.removeChild(menu);
+					closeCurrentMenu();
 				}}]);
 				
 				menu.appendChild(link);
@@ -101,8 +103,7 @@ var gui = {
 				var link = gui.genDom('div', '', 'menuLink', 'Open: ' + url.substr(0, 20), [{name: 'targetUrl', value: url}], [{eventName: 'touchend', func: function(event){
 					openURL(this.getAttribute('targetUrl'));
 					
-					var wait = touchControl.unbindEvent(menu);
-					menu.parentNode.removeChild(menu);
+					closeCurrentMenu();
 				}}]);
 				
 				menu.appendChild(link);
@@ -115,8 +116,7 @@ var gui = {
 			var replyLink = this.genDom('div', '', 'menuLink', 'Reply: ' + targetUser, [{name: 'targetUser', value: targetUser}], [{eventName: 'touchend', func: function(event){
 				gui.chatInput.value = gui.chatInput.value + this.getAttribute('targetUser');
 				
-				var wait = touchControl.unbindEvent(menu);
-				menu.parentNode.removeChild(menu);
+				closeCurrentMenu();
 			}}]);
 			
 			menu.appendChild(replyLink);
@@ -126,8 +126,7 @@ var gui = {
 			var inviteLink = this.genDom('div', '', 'menuLink', 'Invite: @' + targetUser, [{name: 'targetUser', value: targetUser}], [{eventName: 'touchend', func: function(event){
 				chatRoomSockets[currentChannel].send({cmd: 'invite', nick: this.getAttribute('targetUser')});
 				
-				var wait = touchControl.unbindEvent(menu);
-				menu.parentNode.removeChild(menu);
+				closeCurrentMenu();
 			}}]);
 			
 			menu.appendChild(inviteLink);
@@ -136,8 +135,7 @@ var gui = {
 			var ignoreLink = this.genDom('div', '', 'menuLink', 'Ignore: @' + targetUser, [{name: 'targetUser', value: targetUser}], [{eventName: 'touchend', func: function(event){
 				ignoreUser(this.getAttribute('targetUser'));
 				
-				var wait = touchControl.unbindEvent(menu);
-				menu.parentNode.removeChild(menu);
+				closeCurrentMenu();
 			}}]);
 			
 			menu.appendChild(ignoreLink);
@@ -150,7 +148,10 @@ var gui = {
 	},
 	
 	popMainMenu: function(e){
+		closeCurrentMenu();
 		var menu = this.genDom('div', 'mainMenu', 'menu');
+		currentMenu = 'mainMenu';
+		touchControl.handleGlobal = true;
 		
 		// adjust settings goes here //
 		
@@ -158,8 +159,7 @@ var gui = {
 		var channelList = this.genDom('select', 'channelList', 'menuLink', '', [], [{eventName: 'change', func: function(event){
 			changeChannel(this.value);
 			
-			var wait = touchControl.unbindEvent(menu);
-			menu.parentNode.removeChild(menu);
+			closeCurrentMenu();
 		}}]);
 		
 		var changeMe = document.createElement("option");

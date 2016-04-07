@@ -3,7 +3,7 @@ document.id = 'mainDocument';
 gui.init();
 
 document.addEventListener("menubutton", gui.popMainMenu, false);
-document.addEventListener("backbutton", onBack, false);
+document.addEventListener("backbutton", closeCurrentMenu, false);
 
 document.getElementById('username').addEventListener("keydown", function(e){
 		if(e.keyCode == 13 && !e.shiftKey){
@@ -18,6 +18,9 @@ document.getElementById('username').addEventListener("keydown", function(e){
 touchControl.bindEvent(window, 'touchend', function(event){
 	if(touchControl.isScrolling){
 		touchControl.isScrolling = false;
+		return;
+	}else if(touchControl.handleGlobal){
+		touchControl.handleGlobal = false;
 		return;
 	}
 	

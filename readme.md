@@ -44,8 +44,6 @@ Then load http://127.0.0.1/ in _Chrome_. Edit, refresh, repeat.
 	Implement all settings
 	
 	Finish main menu (settings, etc)
-	Set back button to clear menus
-	Fix touch detection loop (use touchControl.ignoreNext)
 
 
 
