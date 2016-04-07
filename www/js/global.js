@@ -252,9 +252,10 @@ function pushMessage(targetDiv, data, linkages){
 	
 	if(data.text.indexOf("@" + myNick) != -1){
 		addClass(rightSide, 'mention');
-		//if($('#notifications').is(":checked") && !document.hasFocus()){ // left here for future reference //
-		// add vibrate phone here //
-		notifySound.play();
+		if(!document.hasFocus()){
+			// add vibrate phone here //
+			notifySound.play();
+		}
 	}else if(data.text.indexOf("@*") != -1){
 		addClass(rightSide, 'mention');
 	}

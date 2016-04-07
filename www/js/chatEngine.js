@@ -30,7 +30,7 @@ var chatEngine = {
 			my.send({cmd: 'verify', version: webClientVersion});
 			my.pingInterval = window.setInterval(function(){
 				my.send({cmd: 'ping'});
-			}, 49*1000);
+			}, 50*1000);
 		}
 		
 		this.ws.onclose = function(){

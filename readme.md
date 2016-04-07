@@ -34,7 +34,6 @@ Then load http://127.0.0.1/ in _Chrome_. Edit, refresh, repeat.
 
 
 # To Do:
-	Update Cordova config.xml to allow app to run as background process
 	Add splash screen, fade out & fade in, div already in place; id "loadOverlay"
 	Add vibration plugin to cordova, if @me then vibrate if process in background
 	Store / load settings from local storage
