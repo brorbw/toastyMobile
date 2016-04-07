@@ -1,6 +1,6 @@
 var gui = {
 	chatInput: '',
-	availableCss: [],
+	availableCss: ['default', 'android'],
 	
 	init: function(channel, div){
 		this.chatInput = document.createElement('textarea');
@@ -75,9 +75,8 @@ var gui = {
 		if(line.getAttribute('channels') != null){
 			JSON.parse(line.getAttribute('channels')).forEach(function(channel){
 				var link = gui.genDom('div', '', 'menuLink', 'Join Channel: ' + channel, [{name: 'targetChannel', value: channel.substr(1)}], [{eventName: 'touchend', func: function(event){
-					joinNewChannel(this.getAttribute('targetChannel'));
-					
 					closeCurrentMenu();
+					joinNewChannel(this.getAttribute('targetChannel'));
 				}}]);
 				
 				menu.appendChild(link);
@@ -88,9 +87,8 @@ var gui = {
 		if(line.getAttribute('imgs') != null){
 			JSON.parse(line.getAttribute('imgs')).forEach(function(img){
 				var link = gui.genDom('div', '', 'menuLink', 'View Image: ' + img.substr(img.lastIndexOf('/')), [{name: 'targetImg', value: img}], [{eventName: 'touchend', func: function(event){
-					viewImage(this.getAttribute('targetImg'));
-					
 					closeCurrentMenu();
+					viewImage(this.getAttribute('targetImg'));
 				}}]);
 				
 				menu.appendChild(link);
@@ -101,9 +99,8 @@ var gui = {
 		if(line.getAttribute('urls') != null){
 			JSON.parse(line.getAttribute('urls')).forEach(function(url){
 				var link = gui.genDom('div', '', 'menuLink', 'Open: ' + url.substr(0, 20), [{name: 'targetUrl', value: url}], [{eventName: 'touchend', func: function(event){
-					openURL(this.getAttribute('targetUrl'));
-					
 					closeCurrentMenu();
+					openURL(this.getAttribute('targetUrl'));
 				}}]);
 				
 				menu.appendChild(link);
@@ -114,9 +111,8 @@ var gui = {
 			// reply //
 			var targetUser = '@' + line.getAttribute('nick');
 			var replyLink = this.genDom('div', '', 'menuLink', 'Reply: ' + targetUser, [{name: 'targetUser', value: targetUser}], [{eventName: 'touchend', func: function(event){
-				gui.chatInput.value = gui.chatInput.value + this.getAttribute('targetUser');
-				
 				closeCurrentMenu();
+				gui.chatInput.value = gui.chatInput.value + this.getAttribute('targetUser');
 			}}]);
 			
 			menu.appendChild(replyLink);
@@ -124,18 +120,16 @@ var gui = {
 			// invite //
 			targetUser = line.getAttribute('nick');
 			var inviteLink = this.genDom('div', '', 'menuLink', 'Invite: @' + targetUser, [{name: 'targetUser', value: targetUser}], [{eventName: 'touchend', func: function(event){
-				chatRoomSockets[currentChannel].send({cmd: 'invite', nick: this.getAttribute('targetUser')});
-				
 				closeCurrentMenu();
+				chatRoomSockets[currentChannel].send({cmd: 'invite', nick: this.getAttribute('targetUser')});
 			}}]);
 			
 			menu.appendChild(inviteLink);
 			
 			// ignore //
 			var ignoreLink = this.genDom('div', '', 'menuLink', 'Ignore: @' + targetUser, [{name: 'targetUser', value: targetUser}], [{eventName: 'touchend', func: function(event){
-				ignoreUser(this.getAttribute('targetUser'));
-				
 				closeCurrentMenu();
+				ignoreUser(this.getAttribute('targetUser'));
 			}}]);
 			
 			menu.appendChild(ignoreLink);
@@ -153,16 +147,43 @@ var gui = {
 		currentMenu = 'mainMenu';
 		touchControl.handleGlobal = true;
 		
-		// adjust settings goes here //
-		
-		// channel selector //
-		var channelList = this.genDom('select', 'channelList', 'menuLink', '', [], [{eventName: 'change', func: function(event){
-			changeChannel(this.value);
-			
+		// clear chat output //
+		var clearLink = this.genDom('div', '', 'menuLink', 'Clear Messages', [], [{eventName: 'touchend', func: function(event){
 			closeCurrentMenu();
+			channelData[currentChannel].chanDiv.innerHTML = '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
+			chatRoomSockets[currentChannel].lastPoster = '';
+			pushMessage(channelData[currentChannel].chanDiv, {nick: '*', text: 'All chat history for this chanel has been cleared; hope you didnt need any of that!'});
+		}}]);
+		
+		menu.appendChild(clearLink);
+		
+		// adjust theme //
+		var styleList = this.genDom('select', 'styleList', 'menuLink', '', [], [{eventName: 'change', func: function(event){
+			closeCurrentMenu();
+			document.getElementById('currentCss').setAttribute('href', 'css/' + this.value + '.css');
 		}}]);
 		
 		var changeMe = document.createElement("option");
+		changeMe.value = currentChannel;
+		changeMe.text = '< Change Theme >';
+		styleList.appendChild(changeMe);
+		
+		this.availableCss.forEach(function(style){
+			var opt = document.createElement("option");
+			opt.value = style;
+			opt.text = style;
+			styleList.appendChild(opt);
+		});
+		
+		menu.appendChild(styleList);
+		
+		// channel selector //
+		var channelList = this.genDom('select', 'channelList', 'menuLink', '', [], [{eventName: 'change', func: function(event){
+			closeCurrentMenu();
+			changeChannel(this.value);
+		}}]);
+		
+		changeMe = document.createElement("option");
 		changeMe.value = currentChannel;
 		changeMe.text = '< Change Channel >';
 		channelList.appendChild(changeMe);
@@ -183,9 +204,5 @@ var gui = {
 		
 		document.body.appendChild(menu);
 		setTimeout( function(){ menu.style.transform = 'translate3d(0px, -100%, 0px)'; }, 100);
-	},
-	
-	temp: function(){
-		
 	}
 }

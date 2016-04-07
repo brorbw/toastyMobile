@@ -35,15 +35,11 @@ Then load http://127.0.0.1/ in _Chrome_. Edit, refresh, repeat.
 
 # To Do:
 	Update Cordova config.xml to allow app to run as background process
-	
 	Add splash screen, fade out & fade in, div already in place; id "loadOverlay"
-	Add channel carousel under login
-	
-	Add vibration plugin and bind to @nick, to vibrate if process in background
-	
-	Implement all settings
-	
-	Finish main menu (settings, etc)
+	Add vibration plugin to cordova, if @me then vibrate if process in background
+	Store / load settings from local storage
+	Load image links over chat output
+	Open url outside of chat app
 
 
 
@@ -53,7 +49,7 @@ Then load http://127.0.0.1/ in _Chrome_. Edit, refresh, repeat.
 	Display chat events with formatting
 	Touch scrolling through chat
 	Touch chat line menu: Reply, ignore, invite, join channel, view image (*PH), open url (*PH)- with animation
-	Main menu (opens with phone menu button): change current channel- with animation
+	Main menu (opens with phone menu button): change current channel & theme, clear messages- with animation
 	Multi channel support
 	
 	

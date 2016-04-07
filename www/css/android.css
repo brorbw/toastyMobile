@@ -2,8 +2,8 @@
 
 /* global css */
 html, body {
-	background-color: #3E362F;
-	color: #AF5B1D;
+	background-color: #002b36;
+	color: #859900;
 }
 
 body {
@@ -22,9 +22,9 @@ input, textarea {
 }
 
 #chatInput{
-	background-color: #554D47;
-	border: none;
-	border-top: 2px solid #AF5B1D;
+	background-color: #002b36;
+	border-color: #657b83;
+	border-top: 2px solid;
 	color: #cbc1b8;
 }
 
@@ -37,7 +37,7 @@ input, textarea {
 	text-shadow: 2px 0 1px #000;
 }
 
-.odd{ background-color: #554D47; }
+.odd{ background-color: #073642; }
 
 .chatLine .leftSide span{ /* trip */
 	color: #DDD;
@@ -45,11 +45,11 @@ input, textarea {
 }
 
 .chatLine .leftSide b{ /* nick */
-	color: #AF5B1D;
+	color: #859900;
 }
 
 .donator{
-	border-bottom: 2px #AF5B1D solid;
+	border-bottom: 2px #0000FF solid;
 }
 
 .me{
@@ -74,17 +74,17 @@ input, textarea {
 
 /* menu css */
 .menu{
-	background: #2E2823;
-	border-top: 2px solid #AF5B1D;
+	background: #002b36;
+	border-top: 2px solid #073642;
 }
 
 .menuLink{
 	border: solid 2px #554D47;
-	background-color: #3E362F;
+	background-color: #073642;
 }
 
 select {
 	border: solid 2px #554D47;
-	background-color: #3E362F;
+	background-color: #073642;
 	color: #FFF;
 }

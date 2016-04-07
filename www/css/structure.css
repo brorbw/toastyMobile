@@ -1,0 +1,192 @@
+@charset "UTF-8";
+/* changing this file is not recommended */
+
+/* global css */
+@font-face {
+  font-family: 'DejaVuSansMono';
+  src: url('../fonts/DejaVuSansMono.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'DejaVuSansMono-Bold';
+  src: url('../fonts/DejaVuSansMono-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'icon';
+  src: url('../fonts/foundation-icons.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'VertigoPlusFLF';
+  src: url('../fonts/VertigoPlusFLF.ttf') format('truetype');
+}
+
+* {
+	transform-origin: 0px 0px 0px;
+}
+
+html|* > svg {
+	transform-origin: 50% 50% 0px;
+}
+
+svg:not(:root), symbol, image, marker, pattern, foreignObject {
+	overflow: hidden;
+}
+
+html, body {
+	height:100%;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+}
+
+#loadOverlay{
+	
+}
+
+#login{
+	transition: all 0.75s;
+	transform: translate3d(0, 0, 0);
+	position: absolute;
+	top: 6vh;
+	width: 75%;
+	margin: 0 auto;
+	left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+	display: table;
+}
+
+#rightGate, #leftGate {
+	transition: all 0.75s;
+	transform: translate3d(0, 0, 0);
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+#rightGate svg, #leftGate svg{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+input, textarea {
+	width: 75%;
+	outline: none;
+	resize: none;
+	box-sizing: border-box;
+	padding: 14px;
+	padding-bottom: 7px;
+}
+
+#chatInput{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+    right: 0;
+	width: 75%;
+	height: 52px;
+	margin: 0 auto;
+	margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+	padding: 1em;
+	padding-bottom: 0em;
+}
+
+/* chat display css */
+.chatOutput{
+	position: absolute;
+	bottom: 56px;
+	left: 0;
+    right: 0;
+	width: 96vw;
+	max-width: 96vw;
+	height: calc(100vh - 56px);
+	margin: 0 auto;
+	margin-left: auto;
+    margin-right: auto;
+    overflow-y: hidden;
+	display: table;
+	border-collapse: separate;
+    border-spacing: 0 1em;
+}
+
+.chatLine{
+	display: table-row;
+}
+
+.chatLine .leftSide{
+	display: table-cell;
+	text-align: right;
+	padding-right: 7px;
+	max-width: 210px;
+    word-wrap: break-word;
+}
+
+.chatLine .leftSide span{ /* trip */
+	font-size: 11px;
+	padding-right: 7px;
+}
+
+.chatLine .rightSide{
+	display: table-cell;
+	max-width: calc(92vw - 210px);
+	word-wrap: break-word;
+}
+
+.admin b{ /* admin nick */
+	color: #dc322f !important;
+}
+
+/* menu css */
+.menu{
+	margin: 0 auto;
+	position: absolute;
+	top: 100vh;
+    transition: all 0.25s;
+    transform: translate3d(0px, 0px, 0px);
+	left: 0;
+	width: 100vw;
+	text-align: center;
+}
+
+.menuLink{
+	margin: 0 auto;
+    width: 90%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 16px;
+}
+
+select {
+	margin: 0 auto;
+    width: 90%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 16px;
+}
+
+@media screen and (min-aspect-ratio: 13/9){ /* landscape */
+	
+}
+
+@media screen and (min-aspect-ratio: 14/9){ /* landscape */
+	
+}
+
+@media screen and (max-aspect-ratio: 13/9){ /* portrait */
+	/*#chatOutput{ display: block; }*/
+	.chatLine{ display: block; }
+	.chatLine .leftSide{ display: block; text-align: left; }
+	/* .chatLine .leftSide:after{ color: #AF5B1D; content: ":"; } */
+	.chatLine .rightSide{ display: block; max-width: 92vw; word-wrap: break-word; padding-top: 4px; padding-bottom: 14px; }
+}
